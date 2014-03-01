@@ -50,7 +50,7 @@ class Contexts
                 if($cls_s) $cls='nav_active';
                 else $cls='';
                 if(is_int(strpos(site_url($menus[0]->url),$site_url)) AND $k!=0) $cls=''; 
-                $image = (is_file($menu->image))  ?  site_url($menu->image)  : '';
+                $image = (is_file($menu->image))  ?  image_url($menu->image)  : '';
                 $nav    .=  "<li class='{$cls}'><a href='{$url}' title='{$name}' target='{$target}' class='{$subclass}'><img src='{$image}' style='max-width:23px; max-height:23px;' /><span>{$name}</span></a>";
                 $nav    .=  $subnav;
                 $nav    .=  "</li>";

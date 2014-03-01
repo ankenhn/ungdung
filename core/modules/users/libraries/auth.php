@@ -924,7 +924,7 @@ class Auth
             $user = new stdClass();
             $user->user_id = $this->ci->session->userdata('user_id');
             $user->full_name = $this->ci->session->userdata('full_name');
-            $user->avatar = site_url($this->ci->session->userdata('avatar'));
+            $user->avatar = image_url($this->ci->session->userdata('avatar'));
             $user->email = $this->ci->session->userdata('email');
             $user->role_id = $this->ci->session->userdata('role_id');
         }
@@ -932,10 +932,10 @@ class Auth
             $user = $this->ci->db->select('id, CONCAT(first_name, " ", last_name) as full_name, avatar, email, role_id',false)->where('id',$userID)->get('users')->row();
             //check and set default avatar
             if(isset($user->avatar) AND is_file($user->avatar)) {
-                $user->avatar = site_url($user->avatar);
+                $user->avatar = image_url($user->avatar);
             }
             else if(isset($user->avatar)) {
-                $user->avatar = site_url($this->ci->config->item('avatar_default'));
+                $user->avatar = image_url($this->ci->config->item('avatar_default'));
             }
         }
         return $user;

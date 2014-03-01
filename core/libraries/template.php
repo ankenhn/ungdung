@@ -280,7 +280,6 @@ class Template
 		// Time to render the layout
 		//
 		self::load_view($layout, self::$data, $controller, TRUE, $output);
-
 		if (empty($output)) { show_error('Unable to find theme layout: '. $layout); }
 
 		self::$ci->output->set_output($output);

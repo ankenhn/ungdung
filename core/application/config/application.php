@@ -272,29 +272,3 @@ $config['assets.encode'] = TRUE;
 /*
 	Array containing the currently available shortcuts - these are output in the /ui/views/shortcut_keys file
 */
-$config['ui.current_shortcuts'] = array(
-	'form_save'      => array('description' => 'Save any form in the admin area.', 'action' => '$("input[name=save]").click();return false;'),
-	'create_new'     => array('description' => 'Create a new record in the module.', 'action' => 'window.location.href=$("a#create_new").attr("href");'),
-	'select_all'     => array('description' => 'Select all records in an index page.', 'action' => '$("table input[type=checkbox]").click();return false;'),
-	'delete'         => array('description' => 'Delete the record(s).', 'action' => '$("#delete-me.btn-danger").click();'),
-	'module_index'   => array('description' => 'Return to the index of the current module.', 'action' => 'window.location.href=$("a#list").attr("href");'),
-	'goto_content'   => array('description' => 'Jump to the Content context.', 'action' => 'window.location.href=$("#tb_content").attr("href")'),
-	'goto_reports'   => array('description' => 'Jump to the Reports context.', 'action' => 'window.location.href=$("#tb_reports").attr("href")'),
-	'goto_settings'  => array('description' => 'Jump to the Settings context.', 'action' => 'window.location.href=$("#tb_settings").attr("href")'),
-	'goto_developer' => array('description' => 'Jump to the Developer context.', 'action' => 'window.location.href=$("#tb_developer").attr("href")'),
-);
-
-//--------------------------------------------------------------------
-// !Emailer
-//--------------------------------------------------------------------
-/*
-	Setting this option to true writes email content to a local file in the log path for debugging
-	using 'development' environments without sendmail such as Windows Desktop servers like WAMP.
-*/
-$config['emailer.write_to_file'] = false;
-
-//--------------------------------------------------------------------
-// !Migrations
-//--------------------------------------------------------------------
-$config['migrate.auto_core']	= FALSE;
-$config['migrate.auto_app']		= FALSE;

@@ -39,12 +39,23 @@
  */
 if ( ! function_exists('site_url'))
 {
-	function site_url($uri = '')
-	{
-		$CI =& get_instance();
+    function site_url($uri = '')
+    {
+        $CI =& get_instance();
+        if(defined('CUSTOMER')) $uri =CUSTOMER.'/'.$uri;
         if(strpos($uri,"//")===false) return $CI->config->site_url($uri);
-		return $uri;
-	}
+        return $uri;
+    }
+}
+
+if ( ! function_exists('image_url'))
+{
+    function image_url($uri = '')
+    {
+        $CI =& get_instance();
+        if(strpos($uri,"//")===false) return $CI->config->site_url($uri);
+        return $uri;
+    }
 }
 
 // ------------------------------------------------------------------------

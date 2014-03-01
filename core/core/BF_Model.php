@@ -79,7 +79,7 @@ class BF_Model extends CI_Model
      * @var string
      * @access protected
      */
-    protected $deleted_field = 'deleted';
+    protected $deleted_field = 'deleted_by';
 
 	/**
 	 * Whether or not to auto-fill a 'created_on' field on inserts.
@@ -87,7 +87,7 @@ class BF_Model extends CI_Model
 	 * @var boolean
 	 * @access protected
 	 */
-	protected $set_created	= false;
+	protected $set_created	= true;
 
 	/**
 	 * Whether or not to auto-fill a 'modified_on' field on updates.
@@ -95,7 +95,7 @@ class BF_Model extends CI_Model
 	 * @var boolean
 	 * @access protected
 	 */
-	protected $set_modified = false;
+	protected $set_modified = true;
 
 	/**
 	 * If TRUE, will log user id for 'created_by', 'modified_by', and 'deleted_by'
@@ -103,7 +103,7 @@ class BF_Model extends CI_Model
 	 * @var bool
 	 * @access protected
 	 */
-	protected $log_user = false;
+	protected $log_user = true;
 
 	/**
 	 * Field name to use as the created by column in the DB table
@@ -145,7 +145,7 @@ class BF_Model extends CI_Model
 	 * @var boolean
 	 * @access protected
 	 */
-	protected $soft_deletes = FALSE;
+	protected $soft_deletes = true;
 
 	/**
 	 * Stores any selects here for use by the find* functions.
@@ -1858,7 +1858,7 @@ class BF_Model extends CI_Model
     }
 
     public function assData($data = array()) {
-        $fields = $this->fields;
+        $fields = $this->field_info;
         if(empty($fields)) {
             $this->error = 'Need config {$fields} of the your model.';
             Template::set_message('Need config fields of the your model.','warning');

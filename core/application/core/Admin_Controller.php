@@ -33,7 +33,7 @@ class Admin_Controller extends Authenticated_Controller
 
         $this->auth->restrict('Site.BackEnd.Login');
         if(!defined('MODULE_URL'))
-        define('MODULE_URL',CUSTOMER_PATH.SITE_AREA.'/'.$this->uri->segment(2).'/'.$this->uri->segment(3));
+        define('MODULE_URL',SITE_AREA.'/'.$this->router->fetch_class().'/'.$this->router->fetch_module());
 
         // load the application lang file here so that the users language is known
         $this->lang->load('application');
