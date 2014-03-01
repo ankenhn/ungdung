@@ -75,7 +75,7 @@ class Base_Controller extends CI_Controller
         $this->load->library('auth');
         if(!$this->customer_model->isUser()) {
             Template::set_message(lang('URL Not Found'),'warning');
-            Template::redirect(WEB_SERVICE);
+            //Template::redirect(WEB_SERVICE);
         }
 
 		// Make sure no assets in up as a requested page or a 404 page.
