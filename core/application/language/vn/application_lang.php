@@ -5,9 +5,6 @@
  *
  */
 
-$lang['author_name']       =   'Google Inc.';
-$lang['author_url']         =   'http://google.com';
-$lang['Developed by']       =   'Được phát triển bởi';
 /****** BUTTON ******/
 $lang['Save']               =   'Lưu';
 $lang['Upload']             =   'Tải lên';

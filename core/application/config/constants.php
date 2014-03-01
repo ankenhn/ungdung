@@ -51,14 +51,16 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 */
 define('SITE_AREA', 'admin');
 define('API_AREA','api');
-define('WEB_URL','http://cuahangtructuyen.vn/');
-define('API_SERVICE','http://duyank.com');
+define('WEB_URL','cuahangtructuyen.vn');
+
+define('WEB_SERVICE','http://duyank.com');
 
 if(isset($_SERVER['SERVER_NAME']) AND strpos(WEB_URL,$_SERVER['SERVER_NAME'])===false) {
     define('CUSTOMER_PATH','');
 }
 else {
     $customer = @array_shift(explode("/",substr(array_shift(array_keys($_GET)),1)));
+    define('CUSTOMER',$customer);
     define('CUSTOMER_PATH',$customer.'/');
     unset($customer);
 }

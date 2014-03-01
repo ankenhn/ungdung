@@ -65,7 +65,17 @@ $db['customer']['username'] = 'root';
 $db['customer']['password'] = '';
 $db['customer']['database'] = 'efox_customer';
 $db['customer']['port']     = '3306';
-
+$db['customer']['dbdriver'] = 'mysql';
+$db['customer']['dbprefix'] = 'efox_';
+$db['customer']['pconnect'] = TRUE;
+$db['customer']['db_debug'] = TRUE;
+$db['customer']['cache_on'] = FALSE;
+$db['customer']['cachedir'] = '';
+$db['customer']['char_set'] = 'utf8';
+$db['customer']['dbcollat'] = 'utf8_general_ci';
+$db['customer']['swap_pre'] = '';
+$db['customer']['autoinit'] = TRUE;
+$db['customer']['stricton'] = TRUE;
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

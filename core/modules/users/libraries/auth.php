@@ -918,23 +918,30 @@ class Auth
 
 	//--------------------------------------------------------------------
 
-	/**
-	 * Returns the identity to be used upon user registration.
-	 *
-	 * @access private
-	 * @todo Decision to be made with this method.
-	 *
-	 * @return void
-	 */
-	private function _identity_login()
-	{
-		//Should I move indentity conditional code from setup_session() here?
-		//Or should conditional code be moved to auth->identity(),
-		//  and if Optional TRUE is passed, it would then determine wich identity to store in userdata?
 
-	}//end _identity_login()
+    public function userProfile($userID=false) {
+        if(!$userID) {
+            $user = new stdClass();
+            $user->user_id = $this->ci->session->userdata('user_id');
+            $user->full_name = $this->ci->session->userdata('full_name');
+            $user->avatar = site_url($this->ci->session->userdata('avatar'));
+            $user->email = $this->ci->session->userdata('email');
+            $user->role_id = $this->ci->session->userdata('role_id');
+        }
+        else {
+            $user = $this->ci->db->select('id, CONCAT(first_name, " ", last_name) as full_name, avatar, email, role_id',false)->where('id',$userID)->get('users')->row();
+            //check and set default avatar
+            if(isset($user->avatar) AND is_file($user->avatar)) {
+                $user->avatar = site_url($user->avatar);
+            }
+            else if(isset($user->avatar)) {
+                $user->avatar = site_url($this->ci->config->item('avatar_default'));
+            }
+        }
+        return $user;
+    }
 
-	//--------------------------------------------------------------------
+
 
 }//end Auth
 
@@ -1024,35 +1031,5 @@ if ( ! function_exists('abbrev_name'))
 
 	}//end abbrev_name()
 
-    public function userProfile($userID=false) {
-        if(!$userID) {
-            $user = new stdClass();
-            $user->user_id = $this->ci->session->userdata('user_id');
-            $user->full_name = $this->ci->session->userdata('full_name');
-            $user->avatar = site_url($this->ci->session->userdata('avatar'));
-            $user->email = $this->ci->session->userdata('email');
-            $user->role_id = $this->ci->session->userdata('role_id');
-        }
-        else {
-            $user = $this->ci->db->select('id, CONCAT(first_name, " ", last_name) as full_name, avatar, email, role_id',false)->where('id',$userID)->get('users')->row();
-            //check and set default avatar
-            if(isset($user->avatar) AND is_file($user->avatar)) {
-                $user->avatar = site_url($user->avatar);
-            }
-            else if(isset($user->avatar)) {
-                $user->avatar = site_url($this->ci->config->item('avatar_default'));
-            }
-        }
-        return $user;
-    }
-
-
-    public function isUser() {
-
-    }
-
-    public function existsPathOrDomain() {
-
-    }
 
 }

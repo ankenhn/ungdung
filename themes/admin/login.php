@@ -52,7 +52,7 @@
     <!-- Login wrapper ends -->
 
 
-    <div class="copyright">Developed by <?php echo anchor(lang("author_url"),lang("author_name"),"target='_blank'"); ?></div>
+    <div class="copyright"><?php echo lang('Developed by'); ?> <?php echo anchor(lang('author_url'),lang('author_name'),"target='_blank'"); ?></div>
 
 
 <?php echo theme_view('parts/footer'); ?>

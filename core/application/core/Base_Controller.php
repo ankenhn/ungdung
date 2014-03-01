@@ -59,7 +59,6 @@ class Base_Controller extends CI_Controller
 	 * @var object
 	 */
 	protected $current_user = NULL;
-
 	//--------------------------------------------------------------------
 
 	/**
@@ -70,12 +69,13 @@ class Base_Controller extends CI_Controller
 	{
 		parent::__construct();
 
-
+        $this->lang->load('general');
+        $this->load->model('users/customer_model','customer_model');
 		$this->load->library('system/settings_lib');
         $this->load->library('auth');
-        if(!$this->auth->isUser()) {
+        if(!$this->customer_model->isUser()) {
             Template::set_message(lang('URL Not Found'),'warning');
-            Template::redirect(WEB_URL);
+            Template::redirect(WEB_SERVICE);
         }
 
 		// Make sure no assets in up as a requested page or a 404 page.
