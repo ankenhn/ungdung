@@ -66,14 +66,22 @@ if ( ! function_exists('showStatus')) {
 }
 
 if(!function_exists('strToDate')) {
-    function strToDate($var) {
-        return implode("-", array_reverse(explode("/", $var)));
+    function strToDate($var='',$time='') {
+        return implode("-", array_reverse(explode("/", $var))).$time;
     }
 }
 if(!function_exists('dateToStr')) {
     function dateToStr($date='') {
         if($date!='' AND $date!='0000-00-00') {
             return date("d/m/Y",strtotime($date));
+        }
+    }
+}
+
+if(!function_exists('datetimeToStr')) {
+    function datetimeToStr($date='') {
+        if($date!='' AND $date!='0000-00-00 00:00:00') {
+            return date("d/m/Y H:i:s",strtotime($date));
         }
     }
 }
@@ -445,6 +453,18 @@ if ( ! function_exists('iif'))
 
         echo $return;
 	}//end iif()
+}
+
+if(!function_exists('getAvatar')) {
+    function getAvatar($url) {
+        if(is_file($url)) {
+            return image_url($url);
+        }
+        else {
+            $ci =&get_instance();
+            return image_url($ci->config->item('avatar_default'));
+        }
+    }
 }
 
 //--------------------------------------------------------------------

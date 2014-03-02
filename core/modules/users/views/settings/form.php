@@ -94,6 +94,20 @@
         </div>
 
         <div class="formRow">
+            <div class="grid3"><label><?php echo lang('Created By'); ?>:</label></div>
+            <div class="grid9">
+                <?php echo isset($user) ? anchor(MODULE_URL.'/profile/'.$user->created_by,$this->auth->name($user->created_by)).' at '.datetimeToStr($user->created_on) : ''; ?>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="formRow">
+            <div class="grid3"><label><?php echo lang('Modify By'); ?>:</label></div>
+            <div class="grid9">
+                <?php echo isset($user) ? anchor(MODULE_URL.'/profile/'.$user->modify_by,$this->auth->name($user->modify_by)).' at '.datetimeToStr($user->modify_on) : ''; ?>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="formRow">
             <div class="grid12"><input type="submit" name="submit" value="<?php echo lang("Save"); ?>" class="buttonM bBlue formSubmit" /></div><div class="clear"></div>
         </div>
     </div>

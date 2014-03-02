@@ -28,66 +28,33 @@
 
 if ( ! function_exists('relative_time'))
 {
-	/**
-	 * Takes a UNIX timestamp and returns a string representing how long ago that date was, like "moments ago", "2 weeks ago", etc.
-	 *
-	 * @param $timestamp int A UNIX timestamp
-	 *
-	 * @return string A human-readable amount of time 'ago'
-	 */
-	function relative_time($timestamp)
-	{
-		if($timestamp != "" && !is_int($timestamp)){
-			$timestamp = strtotime($timestamp);
-		}
+    /**
+     * @param $time
+     * @return bool|string
+     */
+    function relative_time($time) {
+        if ($time !== intval($time)) { $time = strtotime($time); }
+        $d = time() - $time;
+        if ($time < strtotime(date('Y-m-d 00:00:00')) - 60*60*24*3) {
+            $format = 'F j';
+            if (date('Y') !== date('Y', $time)) {
+                $format .= ", Y";
+            }
+            return date($format, $time);
+        }
+        if ($d >= 60*60*24) {
+            $day = 'Yesterday';
+            if (date('l', time() - 60*60*24) !== date('l', $time)) { $day = date('l', $time); }
+            return $day . " at " . date('H:i', $time);
+        }
+        if ($d >= 60*60*2) { return intval($d / (60*60)) . " hours ago"; }
+        if ($d >= 60*60) { return "about an hour ago"; }
+        if ($d >= 60*2) { return intval($d / 60) . " minutes ago"; }
+        if ($d >= 60) { return "about a minute ago"; }
+        if ($d >= 2) { return intval($d) . " seconds ago"; }
+        return "a few seconds ago";
+    }
 
-		if(!is_int($timestamp)){
-			return "never";
-		}
-
-		$difference = time() - $timestamp;
-
-		$periods = array("moment", "min", "hour", "day", "week",
-		"month", "year", "decade");
-
-		$lengths = array("60","60","24","7","4.35","12","10", "10");
-
-		if ($difference >= 0)
-		{
-			// this was in the past
-			$ending = "ago";
-		}
-		else
-		{
-			// this was in the future
-			$difference = -$difference;
-			$ending = "to go";
-		}
-
-		for ($j = 0; $difference >= $lengths[$j]; $j++)
-		{
-			$difference /= $lengths[$j];
-		}
-
-		$difference = round($difference);
-
-		if ($difference != 1)
-		{
-			$periods[$j].= "s";
-		}
-
-		if ($difference < 60 && $j == 0)
-		{
-			$text = "$periods[$j] $ending";
-		}
-		else
-		{
-			$text = "$difference $periods[$j] $ending";
-		}
-
-		return $text;
-
-	}//end relative_time()
 }
 
 //---------------------------------------------------------------

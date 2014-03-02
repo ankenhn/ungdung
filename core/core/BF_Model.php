@@ -358,12 +358,18 @@ class BF_Model extends CI_Model
     protected $field_info = array();
 
     /**
-     *
-     * fields om database
-     *
+     * @var bool
      */
-    protected $fields = array();
-
+    protected $log_activity = true;
+    /**
+     * @var string
+     */
+    protected $target_url ='';
+    protected $action ='';
+    /**
+     * @var bool
+     */
+    protected $customer_id = false;
     //--------------------------------------------------------------------
 
 	/**
@@ -423,7 +429,9 @@ class BF_Model extends CI_Model
 	public function find($id='')
 	{
 		$this->trigger('before_find');
-
+        if($this->customer_id) {
+            $this->db->where($this->table_name . '.customer_id',CUSTOMER_ID);
+        }
 		$query = $this->db->get_where($this->table_name, array($this->table_name . '.' . $this->key => $id));
 
 		if ( ! $query->num_rows())
@@ -462,6 +470,9 @@ class BF_Model extends CI_Model
 	{
 		$this->trigger('before_find');
 
+        if($this->customer_id) {
+            $this->db->where($this->table_name . '.customer_id',CUSTOMER_ID);
+        }
 		$query = $this->db->get($this->table_name);
 
 		if (!$query->num_rows())
@@ -603,26 +614,35 @@ class BF_Model extends CI_Model
                 return false;
             }
 		}
-        
-        if(!$data = $this->assData($data)) {
+        $data = $this->assData($data);
+        if(empty($data)) {
             return false;
         }
 		$data = $this->trigger('before_insert', $data);
 
 		if ($this->set_created === true && $this->log_user === true
-            && ! array_key_exists($this->created_by_field, $data)
-           ) {
+            && ! array_key_exists($this->created_by_field, $data))
+        {
 			$data[$this->created_by_field] = $this->auth->user_id();
 		}
-
+        if ($this->set_modified === TRUE && $this->log_user === TRUE
+            && !array_key_exists($this->modified_by_field, $data))
+        {
+            $data[$this->modified_by_field] = $this->auth->user_id();
+        }
 		// Insert it
+        if($this->customer_id) {
+            $data['customer_id']    =   CUSTOMER_ID;
+        }
 		$status = $this->db->insert($this->table_name, $data);
 
 		if ($status == false) {
 			$this->error = $this->get_db_error_message();
         } elseif ($this->return_insert_id) {
             $id = $this->db->insert_id();
-
+            if($this->log_activity) {
+                $this->log_activity('created',$id);
+            }
             $status = $this->trigger('after_insert', $id);
         }
 
@@ -661,7 +681,10 @@ class BF_Model extends CI_Model
 		if ($this->set_created === true && $this->log_user === true) {
 			$set[$this->created_by_field] = $this->auth->user_id();
 		}
-
+        if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
+        {
+            $data[$this->modified_by_field] = $this->auth->user_id();
+        }
 		if ( ! empty($set)) {
 			foreach ($data as $key => &$record) {
 				$record = $this->trigger('before_insert', $record);
@@ -707,6 +730,7 @@ class BF_Model extends CI_Model
 
 		if ( ! is_array($where))
 		{
+            $id = $where;
 			$where = array($this->key => $where);
 		}
 
@@ -717,9 +741,14 @@ class BF_Model extends CI_Model
 		{
 			$data[$this->modified_by_field] = $this->auth->user_id();
 		}
-
+        if($this->customer_id) {
+            $data['customer_id']    =   CUSTOMER_ID;
+        }
 		if ($result = $this->db->update($this->table_name, $data, $where))
 		{
+            if($this->log_activity AND !is_array($id)) {
+                $this->log_activity($id);
+            }
 			$this->trigger('after_update', array($data, $result));
 			return TRUE;
 		}
@@ -1858,23 +1887,78 @@ class BF_Model extends CI_Model
     }
 
     public function assData($data = array()) {
-        $fields = $this->field_info;
-        if(empty($fields)) {
-            $this->error = 'Need config {$fields} of the your model.';
-            Template::set_message('Need config fields of the your model.','warning');
-            return false;
-        }
+        $fields = $this->get_field_info();
+        $newData = array();
         if(!empty($data)) {
             foreach($data as $key => $value) {
-                if(!in_array($key,$fields) OR $value=='') {
-                    unset($data[$key]);
+                foreach($fields as $field) {
+                    if($key===$field->name) {
+                        if($value=$this->checkField($field,$value)) {
+                            $newData[$key] = $value;
+                        }
+                    }
                 }
             }
         }
-        return $data;
+        return $newData;
     }
 
 
+    private function checkField($field,$value) {
+        if($field->max_length!='') {
+            $value = substr($value,0,$field->max_length);
+        }
+        switch($field) {
+            case 'int':
+                return (int)$field;
+                break;
+            case 'float':
+                return (float)$field;
+            break;
+            case 'datetime':
+                if(preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $value,$val)) {
+                    return $val;
+                }
+                else {
+                    return '0000-00-00 00:00:00';
+                }
+            break;
+
+            case 'date':
+                if(preg_match('/\d{4}-\d{2}-\d{2}/', $value,$val)) {
+                    return $val;
+                }
+                else {
+                    return '0000-00-00';
+                }
+            break;
+            default:
+                return $value;
+            break;
+        }
+    }
+
+
+    public function log_activity($target_id) {
+        $ci =& get_instance();
+        $ci->load->library('user_agent');
+        $data = array('module'=>$ci->router->fetch_module(),
+                        'action'    =>  $this->action,
+                        'user_id'   =>  $ci->auth->user_id(),
+                        'target_id' =>  $target_id,
+                        'target_url'=>  $this->target_url,
+                        'browser'   =>  $this->agent->browser(),
+                        'browser_version'   =>  $ci->agent->version(),
+                        'ip'        =>  $ci->input->ip_address(),
+                        'os'        =>  $ci->agent->platform(),
+                        'created_on'=>  date("Y-m-d H:i:s")
+        );
+        return $this->db->insert('activity',$data);
+    }
+
+    public function setAction($action) {
+        $this->action = $action;
+    }
 
 
 

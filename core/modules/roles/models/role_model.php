@@ -91,13 +91,7 @@ class Role_model extends BF_Model
 
 	public function find($id=NULL)
 	{
-		if (empty($id) || ! is_integer($id))
-		{
-			return FALSE;
-		}
-
 		$role = parent::find($id);
-
 		if ($role == FALSE)
 		{
 			return FALSE;

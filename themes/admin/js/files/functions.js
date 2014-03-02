@@ -22,8 +22,12 @@ $(function() {
         "bProcessing": true,
         "bServerSide": true,
     });
-    
-    
+
+
+
+    //===== Image =====//
+    $('img.mImage').fakecrop({wrapperWidth:50,wrapperHeight:50});
+
 	//===== Left navigation styling =====//
 
     var hash = window.location.hash.substring(1);
@@ -125,9 +129,10 @@ $(function() {
 	
 	
 	//===== Top panel search field =====//
-	
-	$('.userNav a.search').click(function () {
-		$('.topSearch').fadeToggle(150);
+
+    $('#notification .contentNotification').mCustomScrollbar();
+	$('.userNav a.notification').click(function () {
+		$('.topNotification').fadeToggle(150);
 	});
 	
 	

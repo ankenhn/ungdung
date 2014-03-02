@@ -83,18 +83,10 @@ class Settings extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function edit()
+	public function edit($id=false)
 	{
-		$id = (int)$this->uri->segment(5);
-
-		if (empty($id))
-		{
-			Template::set_message('Invalid Role ID.', 'error');
-			redirect(MODULE_URL);
-		}
-
         $role = $this->role_model->find($id);
-        if(!has_permission('Site.'.$role->role_name.'.Manage')) {
+        if(!$role || !has_permission('Site.'.$role->role_name.'.Manage')) {
             Template::set_message('Invalid Role ID.', 'error');
             redirect(MODULE_URL);
         }
@@ -126,13 +118,11 @@ class Settings extends Admin_Controller
 	 *
 	 * @return string The table(s) of settings, ready to be used in a form.
 	 */
-	public function matrix()
+	public function matrix($id=false)
 	{
-		$id = (int)$this->uri->segment(5);
 		$role = $this->role_model->find($id);
-
 		// Verify role has permission to modify this role's access control
-		if ($this->auth->has_permission('Site.'.ucwords($role->role_name).'.Manage')) {
+		if ($role AND $this->auth->has_permission('Site.'.ucwords($role->role_name).'.Manage')) {
 			$permissions_full = $role->permissions;
 
 			$role_permissions = $role->role_permissions;

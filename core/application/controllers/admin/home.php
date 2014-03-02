@@ -53,12 +53,7 @@ class Home extends Admin_Controller
     public function index()
     {
         $this->load->model('roles/role_model');
-
-        $user_role = $this->role_model->find($this->auth->role_id());
-        if($user_role->login_destination=='/admin') {
-            $user_role->login_destination='/admin/content';
-        }
-        redirect(site_url($user_role->login_destination));
+        Template::redirect(SITE_AREA.'/content');
     }//end index()
 
 	//--------------------------------------------------------------------

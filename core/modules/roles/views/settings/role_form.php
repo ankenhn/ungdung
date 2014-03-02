@@ -22,7 +22,6 @@
                 <div class="grid9"><input type="text" value="<?php echo set_value('login_destination',isset($role) ? $role->login_destination : ''); ?>" class="validate[required]" name="login_destination" id="login_destination"/></div>
                 <div class="clear"></div>
             </div>
-
             <div class="formRow">
                 <div class="grid3"><label><?php echo lang('Description'); ?> :</label> </div>
                 <div class="grid9">
@@ -36,7 +35,7 @@
         <div class="widget grid7">
             <div class="whead"><h6>Roles</h6><div class="clear"></div></div>
 
-            <?php echo modules::run('roles/settings/matrix'); ?>
+            <?php echo modules::run('roles/settings/matrix/'.(isset($role) ? $role->role_id : '')); ?>
 
 
             <div class="formRow"><input type="submit" name="save" value="Submit" class="buttonM bBlue formSubmit" /><div class="clear"></div></div>

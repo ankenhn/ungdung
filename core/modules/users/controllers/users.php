@@ -34,7 +34,7 @@ class Users extends Front_Controller
                 $this->load->model('roles/role_model');
 
                 $user_role = $this->role_model->find($this->auth->role_id());
-                Template::redirect(site_url($user_role->login_destination));
+                Template::redirect(SITE_AREA.'/content');
             }//end if
         }//end if
         else {
@@ -178,7 +178,7 @@ class Users extends Front_Controller
 		// Always clear browser data (don't silently ignore user requests :).
 		$this->auth->logout();
 
-		redirect('/');
+		Template::redirect();
 
 	}//end  logout()
 

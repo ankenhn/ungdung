@@ -42,8 +42,10 @@ if ( ! function_exists('site_url'))
     function site_url($uri = '')
     {
         $CI =& get_instance();
-        if(defined('CUSTOMER')) $uri =CUSTOMER.'/'.$uri;
-        if(strpos($uri,"//")===false) return $CI->config->site_url($uri);
+        if(strpos($uri,"//")===false) {
+            if(defined('CUSTOMER')) $uri =str_replace("//","/",CUSTOMER.'/'.$uri);
+            return $CI->config->site_url($uri);
+        }
         return $uri;
     }
 }

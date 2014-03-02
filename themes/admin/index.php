@@ -5,8 +5,29 @@
             <?php echo anchor(SITE_AREA.'/content',settings_item('site.title'),'class="logo"'); ?>
             <!-- Right top nav -->
             <div class="topNav">
+                <ul class="userNav">
+                    <li><a href="#" title="" class="notification"></a></li>
+                    <li><a href="#" title="" class="settings"></a></li>
+                    <li><a href="#" title="" class="logout"></a></li>
+                    <li class="showTabletP"><a href="#" title="" class="sidebar"></a></li>
+                </ul>
                 <a title="" class="iButton"></a>
                 <a title="" class="iTop"></a>
+
+                <div class="topNotification">
+                    <div class="topDropArrow"></div>
+                    <div id="notification">
+                        <div class="fluid headerNotification">
+                            <div><?php echo lang('Recent Activities'); ?></div>
+                        </div>
+                        <div class="contentNotification">
+                            <ul class="fluid"></ul>
+                        </div>
+                        <div class="fluid seeMore">
+                            <div><?php echo anchor(SITE_AREA.'settings/activity',lang('See All')); ?></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Responsive nav -->

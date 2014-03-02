@@ -11,7 +11,8 @@ class Users_model extends BF_Model {
     protected $table_name = 'users';
     protected $roles_table = 'roles';
     protected $date_format = 'datetime';
-
+    protected $target_url = '/settings/users/profile/';
+    protected $customer_id =true;
 
     public function __construct()
     {
@@ -22,7 +23,8 @@ class Users_model extends BF_Model {
     public function loadTable($kTable) {
 
         //check role user manage
-        $roles = $this->db->get($this->roles_table)->result();
+        $this->load->model('roles/role_model');
+        $roles = $this->role_model->find_all();
         $rolesManage = array();
         if(!empty($roles)) {
             foreach($roles as $role) {
@@ -35,8 +37,8 @@ class Users_model extends BF_Model {
         //set column you want select.
         $kTable['columns'][] = 'id';
         //get data fill to table
-        $this->db->select($kTable['columns']);
-        $this->db->select("CONCAT(first_name, ' ', last_name) AS full_name",false);
+        parent::select($kTable['columns']);
+        parent::select("CONCAT(first_name, ' ', last_name) AS full_name",false);
         //build where query
         $strWhere = null;
         if(!empty($kTable['where'])) {
@@ -48,10 +50,10 @@ class Users_model extends BF_Model {
             $strWhere = "(".substr($strWhere,0,-2).")";
         }
         //list all data
-        $data= $this->db->join($this->roles_table,$this->roles_table.'.role_id='.$this->table_name.'.role_id')->where_in($this->table_name.'.role_id',$rolesManage)->where($strWhere,null,false)->order_by($kTable['order_by'],$kTable['sort_by'])->limit($kTable['limit'],$kTable['offset'])->get($this->table_name)->result();
+        $data= parent::join($this->roles_table,$this->roles_table.'.role_id='.$this->table_name.'.role_id')->where_in($this->table_name.'.role_id',$rolesManage)->where($strWhere,null,false)->order_by($kTable['order_by'],$kTable['sort_by'])->limit($kTable['limit'],$kTable['offset'])->find_all();
 
         // total rows found.
-        $totalDisplayRecords = $this->db->join($this->roles_table,$this->roles_table.'.role_id='.$this->table_name.'.role_id')->where_in($this->table_name.'.role_id',$rolesManage)->where($strWhere,null,false)->get($this->table_name)->num_rows();
+        $totalDisplayRecords = parent::join($this->roles_table,$this->roles_table.'.role_id='.$this->table_name.'.role_id')->where_in($this->table_name.'.role_id',$rolesManage)->where($strWhere,null,false)->find_all();
 
         //total rows in database
         $totalRecords = $this->db->join($this->roles_table,$this->roles_table.'.role_id='.$this->table_name.'.role_id')->where_in($this->table_name.'.role_id',$rolesManage)->get($this->table_name)->num_rows();
@@ -82,8 +84,10 @@ class Users_model extends BF_Model {
     public function save($id=false,$data=array()) {
         $data = $this->assignData($data);
         if(!$id) {
+            $this->action = 'created a user';
             return parent::insert($data);
         }
+        $this->action = 'updated a user';
         $result = parent::update($id,$data);
         if($result) {
             return $id;

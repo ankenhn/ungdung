@@ -157,6 +157,7 @@ class Auth
 				'last_login'			=> date('Y-m-d H:i:s', time()),
 				'last_ip'				=> $this->ip_address,
 			);
+            $this->ci->users_model->setAction('has logged');
 			$this->ci->users_model->update($user->id, $data);
 
 			// Clear the cached result of user() (and hence is_logged_in(), user_id() etc).
@@ -939,6 +940,11 @@ class Auth
             }
         }
         return $user;
+    }
+
+    public function name($id) {
+        return $this->ci->db->select('CONCAT(first_name, " ", last_name) as full_name',false)->where('id',$id)->get('users')->row('full_name');
+
     }
 
 

@@ -6,6 +6,7 @@
 @import "bootstrap.css";
 @import "elfinder.css";
 @import "plugins.css";
+@import "jquery.mCustomScrollbar.css";
 
 /* Table of Content
 ==================================================
@@ -183,7 +184,7 @@ ul.userNav li:hover { background-color: #282828; }
 ul.userNav li:active { background-color: #242424; }
 ul.userNav li a { display: block; height: 28px; width: 28px; }
 
-ul.userNav li a.screen { background: url(../images/icons/usernav/screen.png) no-repeat 9px 9px; }
+ul.userNav li a.notification { background: url(../images/icons/usernav/screen.png) no-repeat 9px 9px; }
 ul.userNav li a.settings { background: url(../images/icons/usernav/settings.png) no-repeat 9px 9px; }
 ul.userNav li a.profile { background: url(../images/icons/usernav/profile.png) no-repeat 9px 9px;  }
 ul.userNav li a.messages { background: url(../images/icons/usernav/messages.png) no-repeat 9px 10px;  }
@@ -193,12 +194,47 @@ ul.userNav li a.sidebar { background: url(../images/icons/usernav/sidebar.png) n
 
 /* === Search === */
 
-.topSearch { position: absolute; display: none; right: 30px; top: 58px; background: url(../images/backgrounds/sidebar.jpg); padding: 10px; border-radius: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.topSearch input[type=text] { background: #2c2c2c; padding: 6px 8px 7px 8px; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; color: #9d9d9d; width: 180px; box-shadow: 0 1px 1px #1c1c1c inset, 0 1px 1px #454545; -webkit-box-shadow: 0 1px 1px #1c1c1c inset, 0 1px 1px #454545; -moz-box-shadow: 0 1px 1px #1c1c1c inset, 0 1px 1px #454545; }
-.topSearch input[type=submit] { background-position: 0 0; width: 19px; height: 20px; position: absolute; right: 14px; top: 14px; }
-.topSearch input[type=submit]:hover { background-position: 0 -21px; }
-.topSearch input[type=submit]:active { background-position: 0 -42px; }
-.topDropArrow { background: url(../images/elements/other/dropTopArrow.png) no-repeat; width: 13px; height: 6px; position: absolute; left: 50%; top: -6px; margin-left: -6px; display: block; }
+.topNotification { position: absolute; display: none; right: 30px; top: 58px; background: url(../images/backgrounds/sidebar.jpg); border-radius: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
+#notification {width:300px;}
+#notification .contentNotification {
+    max-height:400px;
+}
+#notification .noActivity {
+    text-align: center;
+    line-height: 50px;
+}
+#notification .notificationRow {
+    padding:5px;
+    border-bottom: 1px solid #2c2c2c;
+    color:#959595;
+    cursor: pointer;
+}
+#notification .notificationRow.unread {
+    background: #2C2C2C;
+}
+#notification li:last-child {
+    border:none;
+}
+#notification .relative_time {
+    display: block;
+    font-size:10px;
+}
+#notification .headerNotification {
+    padding:4px 0px 4px 5px;
+    border-bottom:1px solid #2C2C2C;
+    font-weight: bold;
+    color:#959595;
+}
+#notification .seeMore {
+    text-align: center;
+    border-top:1px solid #2C2C2C;
+    padding:4px 0px;
+    font-weight: bold;
+}
+#notification .seeMore a:hover {
+    text-decoration: underline;
+}
+.topDropArrow { background: url(../images/elements/other/dropTopArrow.png) no-repeat; width: 13px; height: 6px; position: absolute; left: 79%; top: -6px; margin-left: -6px; display: block; }
 
 /* === User search (responsive) === */
 
